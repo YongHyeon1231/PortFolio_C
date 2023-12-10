@@ -1,4 +1,9 @@
-﻿using System;
+﻿using ServerCore;
+using System;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading;
 
 namespace DummyClient
 {
@@ -6,7 +11,29 @@ namespace DummyClient
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            // DNS (Domain Name System)
+            string host = Dns.GetHostName();
+            IPHostEntry ipHost = Dns.GetHostEntry(host);
+            IPAddress ipAddr = ipHost.AddressList[0];
+            IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
+
+            Connector connector = new Connector();
+
+            connector.Connect(endPoint, () => { return new GameSession(); });
+
+            while (true)
+            {
+                try
+                {
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+
+                Thread.Sleep(100);
+            }
         }
     }
 }

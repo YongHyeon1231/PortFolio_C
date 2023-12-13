@@ -29,7 +29,15 @@ namespace DummyClient
 
         public override void Read(ArraySegment<byte> s)
         {
-            throw new NotImplementedException();
+            ushort count = 0;
+
+            // ushort size = BitConverter.ToUInt16(s.Array, s.Offset);
+            count += 2;
+            // ushort id = BitConverter.ToUInt16(s.Array, s.Offset + count);
+            count += 2;
+            // 파싱을 한다.
+            this.playerId = BitConverter.ToInt64(s.Array, s.Offset + count);
+            count += 8;
         }
 
         public override ArraySegment<byte> Write()

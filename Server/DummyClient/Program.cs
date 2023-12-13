@@ -19,7 +19,7 @@ namespace DummyClient
 
             Connector connector = new Connector();
 
-            connector.Connect(endPoint, () => { return new GameSession(); });
+            connector.Connect(endPoint, () => { return new ServerSession(); });
 
             while (true)
             {

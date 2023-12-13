@@ -15,7 +15,18 @@ namespace Server
         public ushort packetId;
     }
 
-    class ClientSession : PacketSession
+    class PlayerInfoReq : Packet
+    {
+        public long playerId;
+    }
+
+    public enum PacketID
+    {
+        PlayerInfoReq = 1,
+        PlayerInfoOk = 2,
+    }
+
+    internal class ClientSession : PacketSession
     {
         public override void OnConnected(EndPoint endPoint)
         {
@@ -36,8 +47,29 @@ namespace Server
         }
         public override void OnRecvPacket(ArraySegment<byte> buffer)
         {
+            ushort count = 0;
+
             ushort size = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
-            ushort id = BitConverter.ToUInt16(buffer.Array, buffer.Offset + 2);
+            count += 2;
+            ushort id = BitConverter.ToUInt16(buffer.Array, buffer.Offset + count);
+            count += 2;
+
+            switch ((PacketID)id)
+            {
+                case PacketID.PlayerInfoReq:
+                    {
+                        // 파싱을 한다.
+                        long playerId = BitConverter.ToInt64(buffer.Array, buffer.Offset + count);
+                        count += 8;
+                        Console.WriteLine($"PlayerInfoReq: {playerId}");
+                    }
+                    break;
+                case PacketID.PlayerInfoOk:
+                    break;
+                default:
+                    break;
+            }
+
             Console.WriteLine($"RecvPacketId: {id}, Size: {size}");
         }
 

@@ -22,7 +22,7 @@ namespace Server
             IPAddress ipAddr = ipHost.AddressList[0];
             IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
 
-            _listener.Init(endPoint, () => { return new GameSession(); });
+            _listener.Init(endPoint, () => { return new ClientSession(); });
             Console.WriteLine("Listening...");
 
             while (true)
